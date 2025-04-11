@@ -8,6 +8,7 @@ if (!process.env.TELEGRAM_BOT_TOKEN) {
   throw new Error("TELEGRAM_BOT_TOKEN must be provided!");
 }
 
+// Create a new bot instance
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
 
 // Add error handling

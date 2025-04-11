@@ -32,8 +32,13 @@ app.get("/", (_req, res) => {
 
 async function startServer() {
   try {
-    // Start the bot
-    await bot.start();
+    // Start the bot with a different polling method
+    await bot.start({
+      drop_pending_updates: true,
+      onStart: () => {
+        console.log("Bot polling started");
+      }
+    });
     console.log("Telegram bot started successfully");
 
     // Start the reminder service
