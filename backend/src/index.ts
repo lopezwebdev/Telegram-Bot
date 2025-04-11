@@ -1,8 +1,7 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import { bot } from "./bot/bot";
-import { AppDataSource } from "./config/database";
-import { ReminderService } from "./services/reminderService";
+import { startReminderService, cleanupOldReminders } from "./services/reminderService";
 
 // Load environment variables
 dotenv.config();
@@ -33,17 +32,21 @@ app.get("/", (_req, res) => {
 
 async function startServer() {
   try {
-    // Initialize database connection
-    await AppDataSource.initialize();
-    console.log("Database connected successfully");
-
     // Start the bot
     await bot.start();
     console.log("Telegram bot started successfully");
 
-    // Initialize reminder service
-    const reminderService = new ReminderService(bot);
-    console.log("Reminder service initialized");
+    // Start the reminder service
+    await startReminderService(bot);
+    console.log("Reminder service started successfully");
+
+    // Schedule cleanup of old reminders (run once a day)
+    setInterval(async () => {
+      await cleanupOldReminders();
+    }, 24 * 60 * 60 * 1000);
+    
+    // Run initial cleanup
+    await cleanupOldReminders();
 
     // Start Express server
     app.listen(port, () => {
@@ -53,7 +56,6 @@ async function startServer() {
     // Handle graceful shutdown
     process.on("SIGTERM", () => {
       console.log("SIGTERM received. Shutting down gracefully...");
-      reminderService.stop();
       process.exit(0);
     });
   } catch (error) {

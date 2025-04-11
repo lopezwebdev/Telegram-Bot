@@ -22,6 +22,9 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "paths": {
+      "@prisma/*": ["backend/generated/prisma/*"]
+    },
     "incremental": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },

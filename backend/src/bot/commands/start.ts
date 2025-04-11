@@ -1,12 +1,21 @@
 import { Context } from "grammy";
 
-export async function startCommand(ctx: Context) {
-  await ctx.reply(
-    "Welcome! 👋 I'm your personal assistant bot. Here are my commands:\n\n" +
-    "/start - Show this welcome message\n" +
-    "/help - Show available commands\n" +
-    "/weather - Get weather information\n" +
-    "/reminder - Set a reminder\n" +
-    "/notes - Manage your notes"
-  );
-} 
+export const startCommand = async (ctx: Context) => {
+  try {
+    console.log(`Start command received from user ${ctx.from?.id}`);
+    
+    const welcomeMessage = 
+      "👋 Welcome to RedPineappleBot!\n\n" +
+      "I can help you with:\n" +
+      "🌤️ /weather [city] - Get weather information\n" +
+      "⏰ /reminder [time] [message] - Set a reminder\n" +
+      "📝 /notes - Manage your notes\n\n" +
+      "Use /help to see all available commands!";
+
+    await ctx.reply(welcomeMessage);
+    console.log(`Welcome message sent to user ${ctx.from?.id}`);
+  } catch (error) {
+    console.error("Error in start command:", error);
+    await ctx.reply("Sorry, I encountered an error. Please try again later.");
+  }
+}; 
