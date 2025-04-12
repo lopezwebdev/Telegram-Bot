@@ -176,11 +176,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://sampeiayumi@localhost:5432/telegram_bot_db?schema=public"
+        "value": null
       }
     }
   },
